@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu Gerencial</title>
+    <link rel="stylesheet" href="styles/menu.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2>Topicos</h2>
+      <a href="#" data-pagina="usuario">Usuário</a>
+      <a href="#" data-pagina="cadastro">Cadastro</a>
+      <a href="#" data-pagina="relatorios">Relatórios</a>
+
+      <div id="alertaSucos" class="modal-alerta" style="display: none">
+        <div class="modal-conteudo">
+          <h2>Alerta de Estoque Baixo</h2>
+          <p id="mensagemAlerta">Carregando...</p>
+          <button onclick="fecharAlerta()">Fechar</button>
+        </div>
+      </div>
+
+      <div
+        style="margin-top: auto; padding-top: 20px; border-top: 1px solid #333"
+      >
+        <div class="user-info">
+          <h2>Usuário logado</h2>
+          <span id="userName">Usuário </span>
+          <a href="#" id="logoutBtn">Sair</a>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div class="logo">Modulo Gerencial</div>
+        <div class="nav">
+          <a href="#" data-pagina="carregarTelaInicial()">Home</a>
+        </div>
+      </div>
+      <div id="conteudo" class="conteudo">
+        <h1>Bem-vindo ao painel</h1>
+        <p>Este é o espaço principal.</p>
+      </div>
+    </div>
+    <script type="module">
+      import {
+        salvarUsuario,
+        carregarConteudo,
+        carregarUsuarios,
+      } from "./scripts/funcoes.js";
+      import { db } from "./scripts/firebaseConfig.js";
+      import {
+        ref,
+        get,
+      } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+      window.salvarUsuario = salvarUsuario;
+      window.carregarUsuarios = carregarUsuarios;
+      window.carregarConteudo = carregarConteudo;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        if (document.getElementById("tabelaUsuarios")) {
+          carregarUsuarios();
+        }
+
+        // ✅ Adiciona eventos aos links com data-pagina
+        document.querySelectorAll("a[data-pagina]").forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const pagina = link.getAttribute("data-pagina");
+            carregarConteudo(pagina);
+          });
+        });
+      });
+
+      function verificarNiveisBaixos() {
+        const instituicoes = [
+          { nome: "FAETERJ", caminho: "faeterj/100/sucos" },
+          { nome: "CEFET", caminho: "cefet/200/sucos" },
+        ];
+
+        const sucosBaixosPorInstituicao = [];
+
+        // Para cada instituição, busca os dados separadamente
+        Promise.all(
+          instituicoes.map((inst) => {
+            const sucosRef = ref(db, inst.caminho);
+
+            return get(sucosRef).then((snapshot) => {
+              if (snapshot.exists()) {
+                const sucos = snapshot.val();
+                const sucosBaixos = [];
+
+                for (const key in sucos) {
+                  if (sucos[key] && sucos[key].quantidade_suco <= 40) {
+                    sucosBaixos.push(sucos[key].nome);
+                  }
+                }
+
+                if (sucosBaixos.length > 0) {
+                  sucosBaixosPorInstituicao.push({
+                    instituicao: inst.nome,
+                    sucos: sucosBaixos,
+                  });
+                }
+              }
+            });
+          })
+        )
+          .then(() => {
+            if (sucosBaixosPorInstituicao.length > 0) {
+              const mensagem = sucosBaixosPorInstituicao
+                .map((item) => {
+                  return `
+          <strong>Instituição:</strong> ${item.instituicao}<br>
+          ${item.sucos.map((nome) => `• ${nome}`).join("<br>")}
+        `;
+                })
+                .join("<br><br>");
+
+              document.getElementById("mensagemAlerta").innerHTML = mensagem;
+              document.getElementById("alertaSucos").style.display = "flex";
+            }
+          })
+          .catch((error) => {
+            console.error("Erro ao verificar níveis dos sucos:", error);
+          });
+      }
+
+      window.fecharAlerta = () => {
+        document.getElementById("alertaSucos").style.display = "none";
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        verificarNiveisBaixos();
+      });
+    </script>
+  </body>
+</html>
