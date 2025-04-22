@@ -1,0 +1,108 @@
+{
+  "administradores": {
+    "1": {
+      "id": 1,
+      "nome_login": "erick.adm",
+      "senha": 123
+    }
+  },
+  "cefet": {
+    "200": {
+      "sucos": [
+        null,
+        {
+          "codigo_suco": 1,
+          "nome": "Laranja",
+          "quantidade_saida": 0,
+          "quantidade_suco": 100
+        },
+        {
+          "codigo_suco": 2,
+          "nome": "Uva",
+          "quantidade_saida": 0,
+          "quantidade_suco": 100
+        },
+        {
+          "codigo_suco": 3,
+          "nome": "Caju",
+          "quantidade_saida": 0,
+          "quantidade_suco": 40
+        },
+        {
+          "codigo_suco": 4,
+          "nome": "Goiaba",
+          "quantidade_saida": 0,
+          "quantidade_suco": 100
+        }
+      ],
+      "usuarios": {
+        "20012": {
+          "matricula": "20012",
+          "nome": "Maicon"
+        },
+        "20015": {
+          "matricula": "20015",
+          "nome": "Renata"
+        },
+        "20021": {
+          "matricula": "20021",
+          "nome": "Bruna"
+        },
+        "20045": {
+          "matricula": "20045",
+          "nome": "Lucas"
+        },
+        "20087": {
+          "matricula": "20087",
+          "nome": "Harles",
+          "test": "test"
+        }
+      }
+    }
+  },
+  "faeterj": {
+    "100": {
+      "sucos": [
+        null,
+        {
+          "codigo_suco": 1,
+          "nome": "Laranja",
+          "quantidade_saida": 0,
+          "quantidade_suco": 100
+        },
+        {
+          "codigo_suco": 2,
+          "nome": "Uva",
+          "quantidade_saida": 0,
+          "quantidade_suco": 100
+        },
+        {
+          "codigo_suco": 3,
+          "nome": "Caju",
+          "quantidade_saida": 0,
+          "quantidade_suco": 100
+        },
+        {
+          "codigo_suco": 4,
+          "nome": "Goiaba",
+          "quantidade_saida": 0,
+          "quantidade_suco": 20
+        }
+      ],
+      "usuarios": {
+        "10012": {
+          "matricula": 10012,
+          "nome": "Alberto"
+        },
+        "10015": {
+          "matricula": "10015",
+          "nome": "Gustavo"
+        },
+        "10021": {
+          "matricula": 10021,
+          "nome": "Marcelo"
+        }
+      }
+    }
+  }
+}

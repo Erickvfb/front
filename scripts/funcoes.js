@@ -305,6 +305,7 @@ export function carregarConteudo(pagina) {
               <tr>
                 <th>Matrícula</th>
                 <th>Nome</th>
+                <th>Instituição</th>
               </tr>
             </thead>
             <tbody id="tabelaUsuarios" style="text-align: center; vertical-align: middle;">
